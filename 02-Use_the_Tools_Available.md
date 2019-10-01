@@ -6,7 +6,7 @@ An automated framework for executing these tools should be established very earl
 
 Source control is an absolute necessity for any software development project. If you are not using one yet, start using one.
 
- * [GitHub](https://github.com/) - allows for unlimited public repositories, must pay for a private repository.
+ * [GitHub](https://github.com/) - allows for unlimited public repositories, and unlimited private repositories with up to 3 collaborators.
  * [Bitbucket](https://bitbucket.org/) - allows for unlimited private repositories with up to 5 collaborators, for free.
  * [SourceForge](http://sourceforge.net/) - open source hosting only.
  * [GitLab](https://gitlab.com/) - allows for unlimited public and private repositories, unlimited CI Runners included, for free.
@@ -22,10 +22,12 @@ Use an industry standard widely accepted build tool. This prevents you from rein
    * Utilize: https://cmake.org/cmake/help/v3.6/command/target_compile_features.html for C++ standard flags
    * Consider: https://github.com/cheshirekow/cmake_format for automatic formatting of your CMakeLists.txt
    * See the [Further Reading](10-Further_Reading.md) section for CMake specific best practices
+   * `cmake --build` provides a common interface for compiling your project regardless of platform
  * [Waf](https://waf.io/)
  * [FASTBuild](http://www.fastbuild.org/)
  * [Ninja](https://ninja-build.org/) - can greatly improve the incremental build time of your larger projects. Can be used as a target for CMake.
- * [Bazel](http://bazel.io/) - Note: MacOS and Linux only.
+ * [Bazel](http://bazel.io/) - Fast incremental builds using network artefact caching and remote execution
+ * [Buck](http://buckbuild.com/) - Similar to Bazel, with very good support for iOS and Andoid
  * [gyp](https://chromium.googlesource.com/external/gyp/) - Google's build tool for chromium.
  * [maiken](https://github.com/Dekken/maiken) - Crossplatform build tool with Maven-esque configuration style.
  * [Qt Build Suite](http://doc.qt.io/qbs/) - Crossplatform build tool From Qt.
@@ -44,6 +46,7 @@ Package management is an important topic in C++, with currently no clear winner.
  * [C++ Archive Network (CPPAN)](https://cppan.org/) - a crossplatform dependency manager for C++
  * [qpm](https://www.qpm.io/) - Package manager for Qt
  * [build2](https://build2.org/) - cargo-like package management for C++
+ * [Buckaroo](https://buckaroo.pm) - Truly decentralized cross-platform dependency manager for C/C++ and more
 
 ## Continuous Integration
 
@@ -105,18 +108,18 @@ You should use as many compilers as you can for your platform(s). Each compiler 
  * `-Wcast-align` warn for potential performance problem casts
  * `-Wunused` warn on anything being unused
  * `-Woverloaded-virtual` warn if you overload (not override) a virtual function
- * `-Wpedantic` warn if non-standard C++ is used
+ * `-Wpedantic` (all versions of GCC, Clang >= 3.2) warn if non-standard C++ is used
  * `-Wconversion` warn on type conversions that may lose data
- * `-Wsign-conversion` warn on sign conversions
- * `-Wmisleading-indentation` warn if indentation implies blocks where blocks do not exist
- * `-Wduplicated-cond` warn if `if` / `else` chain has duplicated conditions
- * `-Wduplicated-branches` warn if `if` / `else` branches have duplicated code
- * `-Wlogical-op` warn about logical operations being used where bitwise were probably wanted
- * `-Wnull-dereference` warn if a null dereference is detected
- * `-Wuseless-cast` warn if you perform a cast to the same type
- * `-Wdouble-promotion` warn if `float` is implicit promoted to `double`
+ * `-Wsign-conversion` (Clang all versions, GCC >= 4.3) warn on sign conversions
+ * `-Wmisleading-indentation` (only in GCC >= 6.0) warn if indentation implies blocks where blocks do not exist
+ * `-Wduplicated-cond` (only in GCC >= 6.0) warn if `if` / `else` chain has duplicated conditions
+ * `-Wduplicated-branches` (only in GCC >= 7.0) warn if `if` / `else` branches have duplicated code
+ * `-Wlogical-op` (only in GCC) warn about logical operations being used where bitwise were probably wanted
+ * `-Wnull-dereference` (only in GCC >= 6.0) warn if a null dereference is detected
+ * `-Wuseless-cast` (only in GCC >= 4.8) warn if you perform a cast to the same type
+ * `-Wdouble-promotion` (GCC >= 4.6, Clang >= 3.8) warn if `float` is implicit promoted to `double`
  * `-Wformat=2` warn on security issues around functions that format output (ie `printf`)
- * `-Wlifetime` (clang only currently) shows object lifetime issues
+ * `-Wlifetime` (only special branch of Clang currently) shows object lifetime issues
  
 Consider using `-Weverything` and disabling the few warnings you need to on Clang
 
@@ -127,7 +130,7 @@ Consider using `-Weverything` and disabling the few warnings you need to on Clan
 
 `/permissive-` - [Enforces standards conformance](https://docs.microsoft.com/en-us/cpp/build/reference/permissive-standards-conformance).
 
-`/W4 /W14640` - use these and consider the following (see descriptions below)
+`/W4 /w14640` - use these and consider the following (see descriptions below)
 
  * `/W4` All reasonable warnings
  * `/w14242` 'identfier': conversion from 'type1' to 'type1', possible loss of data
@@ -215,7 +218,7 @@ Clang's analyzer's default options are good for the respective platform. It can 
 
 Also, [CodeChecker](https://github.com/Ericsson/CodeChecker) is available as a front-end to clang's static analysis.
 
-`clang-tidy` can be easily used with Visual Studio via the [Clang Power Tools](https://caphyon.github.io/clang-power-tools/) extension.
+`clang-tidy` can be easily used with Visual Studio via the [Clang Power Tools](https://clangpowertools.com) extension.
 
 ### MSVC's Static Analyzer
 
@@ -244,6 +247,11 @@ Qt Creator can plug into the clang static analyzer.
 ### clazy
 
 [clazy](https://github.com/KDE/clazy) is a clang based tool for analyzing Qt usage.
+
+### IKOS
+
+[IKOS](https://ti.arc.nasa.gov/opensource/ikos/) is an open source static analyzer, developed by NASA. It is based on the Abstract Interpretation. It is written in C++ and provides an analyzer for C and C++, using LLVM.
+The source code is [available on Github](https://github.com/NASA-SW-VnV/ikos).
 
 ## Runtime Checkers
 
